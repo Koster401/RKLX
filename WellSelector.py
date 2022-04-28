@@ -28,6 +28,7 @@ class WellSelector:
 
         """
 
+        #Here we very stupidly try to input values if our script arguments were None
         if plate_format == None:
             plate_format = "8x12"
 
@@ -38,17 +39,22 @@ class WellSelector:
             title = "WellSelector"
         
         
-                
+        #Creating the title        
         master.title(title)
+
+        #Creating the top level widget
         self.label = ttk.Label(master,
                                text = info_text,
                                font = ("bold"))
+
+        #Creating the header widget and placing it
         self.label.grid(row = 0,
                         column = 0,
                         padx = 5,
                         pady = 5,
                         sticky = 'sw')
 
+        #Creating the WellSelector frame and placing it
         self.frame = Frame(master,
                            highlightbackground = "grey",
                            highlightthickness = 1)
@@ -56,28 +62,34 @@ class WellSelector:
                         column = 0,
                         padx = 5,
                         pady = 5)
+        #Calculating the plateformat
         self.plate_xloc = plate_format.index("x")
         self.plate_nrows = int(plate_format[0:self.plate_xloc])
         self.plate_ncols = int(plate_format[self.plate_xloc+1:])
 
+        #Writing down the alphabet like an ape
         self.letters = "ABCDEFGHIJKLMNOPQRSTUVXYZ"
         self.check_value = IntVar()
-
+        
+        #Creating and placing the letter labels of the plate
         for i in range(self.plate_nrows):
             ttk.Label(self.frame, text = self.letters[i]).grid(row = i + 1,
                                                                column = 0,
                                                                padx = 5)
-
+        #Creating and placing the number labels of the plate
         for i in range(self.plate_ncols):
             ttk.Label(self.frame, text = str(i + 1)).grid(row = 0,
                                                           column = i + 1,
                                                           sticky = "sw")
+
+        #Making empty variables and lists
         self.check_button_counter = 0
         self.check_button_variable_list = []
         self.well_list = []
         global check_button_list
         global well_list
-        
+
+        #Creating and placing the checkboxes
         for i in range(self.plate_ncols):
             for j in range(self.plate_nrows):
                 self.well = f"{self.letters[j]}{i+1}"
@@ -91,9 +103,11 @@ class WellSelector:
                                        ipady = 2)
                 self.check_button_counter += 1
 
+        #Updating the list of checkbutton variables
         check_button_list = self.check_button_variable_list
         well_list = self.well_list
-
+        
+        #Creating and placing the Done button
         ttk.Button(master,
                    text = "Done",
                    command = lambda: [self.done(), master.destroy()]).grid(row = 2,
@@ -104,25 +118,29 @@ class WellSelector:
     def done(self):
         
         """"This function retrieves the state of the check_button_list and writes it to an outputfile"""
-        
+
+        #Getting the list of checkbutton variables
         global check_button_list
         self.check_button_state_list = []
-        self.dir_output = f"{os.path.dirname(os.path.realpath(__file__))}\Output.csv"
-        print(self.dir_output)
-        #self.check_button_state_dict = {}
 
+        #Finding the script location and defining our outputfile
+        self.dir_output = f"{os.path.dirname(os.path.realpath(__file__))}\Output.csv"
+
+        #Opening the outputfile and writing the header
         self.f = open(self.dir_output, "w")
         self.f.write("Well;State\n")
-        
+
+        #Going through the list of checkbutton variables and fetching the checkbutton state
+        #Writing the well ID and the checkbox state in the outputfile
         for i in range(len(check_button_list)):
             self.check_button_value = check_button_list[i].get()
-            #self.check_button_state_list.append(self.check_button_value)
-            #self.check_button_state_dict[well_list[i]] = self.check_button_value
             print(f"{well_list[i]}: {self.check_button_value}")
             self.f.write(f"{well_list[i]}; {self.check_button_value}\n")
         self.f.close()
         
 def main():
+
+    """This function fetches any arguments passed with the script and parses them to the WellSelector class"""
 
     # Construct the argument parser
     ap = argparse.ArgumentParser()
@@ -145,9 +163,13 @@ def main():
     #print(args["foperand"])
     #print(args["soperand"])
     #print(args["toperand"])
-    
+
+    #This fixes grainy widgets
     windll.shcore.SetProcessDpiAwareness(1)
+
+
     root = Tk()
+    #Running the WellSelector class with the fetched script arguments
     app = WellSelector(root,
                        args["foperand"],
                        args["soperand"],
