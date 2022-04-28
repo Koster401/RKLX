@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from ctypes import windll
 import os
+import argparse
 
 
 class WellSelector:
@@ -13,19 +14,30 @@ class WellSelector:
 
     def __init__(self,
                  master,
-                 info_text = "",
                  plate_format = "8x12",
+                 info_text = "",
                  title = "WellSelector"):
 
         """"Create all widgets needed for the WellSelector GUI
 
         Keyword arguments:
         master -- the top level widget
-        info_text -- The heading text on the WellSelector (default "8x12")
-        plate_format -- The microplate format (default "")
+        plate_format -- The microplate format (default "8x12")
+        info_text -- The heading text on the WellSelector (default "")
         title -- The text in the window header (default "WellSelector")
 
         """
+
+        if plate_format == None:
+            plate_format = "8x12"
+
+        if info_text == None:
+            info_text = ""
+
+        if title == None:
+            title = "WellSelector"
+        
+        
                 
         master.title(title)
         self.label = ttk.Label(master,
@@ -87,7 +99,7 @@ class WellSelector:
                    command = lambda: [self.done(), master.destroy()]).grid(row = 2,
                                                                            column = 0,
                                                                            padx = 5,
-                                                                           pady = 5)
+                                                                           pady = 10)
 
     def done(self):
         
@@ -95,7 +107,7 @@ class WellSelector:
         
         global check_button_list
         self.check_button_state_list = []
-        self.dir_output = f"{os.path.dirname(os.path.realpath(__file__))}\Output.txt"
+        self.dir_output = f"{os.path.dirname(os.path.realpath(__file__))}\Output.csv"
         print(self.dir_output)
         #self.check_button_state_dict = {}
 
@@ -110,18 +122,36 @@ class WellSelector:
             self.f.write(f"{well_list[i]}; {self.check_button_value}\n")
         self.f.close()
         
-        
-        
-        
-        
-
 def main():
+
+    # Construct the argument parser
+    ap = argparse.ArgumentParser()
+    
+    # Add the arguments to the parser
+    ap.add_argument("-plate_format",
+                    "--foperand",
+                    required=False,
+                    help="first operand")
+    ap.add_argument("-info_text",
+                    "--soperand",
+                    required=False,
+                    help="second operand")
+    ap.add_argument("-title",
+                    "--toperand",
+                    required=False,
+                    help="third operand")
+    args = vars(ap.parse_args())
+
+    #print(args["foperand"])
+    #print(args["soperand"])
+    #print(args["toperand"])
     
     windll.shcore.SetProcessDpiAwareness(1)
     root = Tk()
     app = WellSelector(root,
-                       "Vælg de utætte positioner på pladen.",
-                       "16x24")
+                       args["foperand"],
+                       args["soperand"],
+                       args["toperand"])
     root.mainloop()
     
 if __name__ == "__main__": main()
