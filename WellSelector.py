@@ -7,6 +7,7 @@ from tkinter import messagebox
 from ctypes import windll
 import os
 import argparse
+from tkinter.tix import *
 
 
 class WellSelector:
@@ -44,6 +45,8 @@ class WellSelector:
         self.style.configure('TLabel', background = 'white')
         self.style.configure('TCheckbutton', background = 'white')
         master.configure(background = 'white')
+
+        self.tip = Balloon(master)
         
         #Creating the title        
         master.title(title)
@@ -91,11 +94,6 @@ class WellSelector:
                                                           column = i + 1,
                                                           sticky = "sw")
 
-        #self.switch_on = PhotoImage(width=20, height=20)
-        #self.switch_off = PhotoImage(width=20, height=20)
-        #self.switch_on.put(("blue",), to=(0, 0, 20,20))
-        #self.switch_off.put(("#D3D3D3",), to=(0, 0, 20, 20))
-
         #Making empty variables and lists
         self.check_button_counter = 0
         self.check_button_variable_list = []
@@ -120,6 +118,9 @@ class WellSelector:
                                        ipady = 2,
                                        padx = 2,
                                        pady = 2)
+                self.tip.bind_widget(self.check_button,
+                             balloonmsg = self.well)
+                
                 self.check_button_counter += 1
 
         #Updating the list of checkbutton variables
@@ -133,6 +134,9 @@ class WellSelector:
                                                                            column = 0,
                                                                            padx = 5,
                                                                            pady = 5)
+
+        
+        
 
     def done(self):
         
