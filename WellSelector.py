@@ -1,4 +1,4 @@
-# WellSelector.py by Rasmus Larsen (RKLX)
+# WellSelector.py by Rasmus Köster Larsen (RKLX)
 # First version
 
 from tkinter import *
