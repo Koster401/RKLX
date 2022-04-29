@@ -1,4 +1,5 @@
 # WellSelector.py by Rasmus Larsen (RKLX)
+# First version
 
 from tkinter import *
 from tkinter import ttk
