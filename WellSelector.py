@@ -39,6 +39,11 @@ class WellSelector:
         if title == None:
             title = "WellSelector"
         
+        self.style = ttk.Style()
+        self.style.configure('TFrame', background = 'white')
+        self.style.configure('TLabel', background = 'white')
+        self.style.configure('TCheckbutton', background = 'white')
+        master.configure(background = 'white')
         
         #Creating the title        
         master.title(title)
@@ -57,12 +62,15 @@ class WellSelector:
 
         #Creating the WellSelector frame and placing it
         self.frame = Frame(master,
-                           highlightbackground = "grey",
-                           highlightthickness = 1)
+                           highlightbackground = "lightgrey",
+                           highlightthickness = 1,
+                           background = 'white')
         self.frame.grid(row = 1,
                         column = 0,
                         padx = 5,
-                        pady = 5)
+                        pady = 5,
+                        ipadx = 10,
+                        ipady = 10)
         #Calculating the plateformat
         self.plate_xloc = plate_format.index("x")
         self.plate_nrows = int(plate_format[0:self.plate_xloc])
@@ -76,12 +84,17 @@ class WellSelector:
         for i in range(self.plate_nrows):
             ttk.Label(self.frame, text = self.letters[i]).grid(row = i + 1,
                                                                column = 0,
-                                                               padx = 5)
+                                                               padx = 2)
         #Creating and placing the number labels of the plate
         for i in range(self.plate_ncols):
             ttk.Label(self.frame, text = str(i + 1)).grid(row = 0,
                                                           column = i + 1,
                                                           sticky = "sw")
+
+        #self.switch_on = PhotoImage(width=20, height=20)
+        #self.switch_off = PhotoImage(width=20, height=20)
+        #self.switch_on.put(("blue",), to=(0, 0, 20,20))
+        #self.switch_off.put(("#D3D3D3",), to=(0, 0, 20, 20))
 
         #Making empty variables and lists
         self.check_button_counter = 0
@@ -96,12 +109,17 @@ class WellSelector:
                 self.well = f"{self.letters[j]}{i+1}"
                 self.well_list.append(self.well)
                 self.check_button_variable_list.append(IntVar())
-                self.check_button = ttk.Checkbutton(self.frame,
-                                                    variable = self.check_button_variable_list[self.check_button_counter])
+                self.check_button = Checkbutton(self.frame,
+                                                variable = self.check_button_variable_list[self.check_button_counter],
+                                                selectcolor="blue",
+                                                indicatoron=False,
+                                                width = 2)
                 self.check_button.grid(row = j + 1,
                                        column = i + 1,
                                        ipadx = 2,
-                                       ipady = 2)
+                                       ipady = 2,
+                                       padx = 2,
+                                       pady = 2)
                 self.check_button_counter += 1
 
         #Updating the list of checkbutton variables
@@ -114,7 +132,7 @@ class WellSelector:
                    command = lambda: [self.done(), master.destroy()]).grid(row = 2,
                                                                            column = 0,
                                                                            padx = 5,
-                                                                           pady = 10)
+                                                                           pady = 5)
 
     def done(self):
         
