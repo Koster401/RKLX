@@ -5,9 +5,9 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from ctypes import windll
+from tkinter.tix import *
 import os
 import argparse
-from tkinter.tix import *
 
 
 class WellSelector:
@@ -39,6 +39,9 @@ class WellSelector:
 
         if title == None:
             title = "WellSelector"
+
+        #Resizing of the window not allowed
+        master.resizable(False, False)    
         
         self.style = ttk.Style()
         self.style.configure('TFrame', background = 'white')
@@ -87,12 +90,13 @@ class WellSelector:
         for i in range(self.plate_nrows):
             ttk.Label(self.frame, text = self.letters[i]).grid(row = i + 1,
                                                                column = 0,
-                                                               padx = 2)
+                                                               padx = 2,
+                                                               sticky = "w")
         #Creating and placing the number labels of the plate
         for i in range(self.plate_ncols):
             ttk.Label(self.frame, text = str(i + 1)).grid(row = 0,
                                                           column = i + 1,
-                                                          sticky = "sw")
+                                                          sticky = "s")
 
         #Making empty variables and lists
         self.check_button_counter = 0
@@ -111,7 +115,8 @@ class WellSelector:
                                                 variable = self.check_button_variable_list[self.check_button_counter],
                                                 selectcolor="blue",
                                                 indicatoron=False,
-                                                width = 2)
+                                                width = 3,
+                                                height = 1)
                 self.check_button.grid(row = j + 1,
                                        column = i + 1,
                                        ipadx = 2,
@@ -136,8 +141,9 @@ class WellSelector:
                                                                            pady = 5)
 
         
-        
-
+        #This fixes grainy widgets
+        windll.shcore.SetProcessDpiAwareness(1)
+    
     def done(self):
         
         """"This function retrieves the state of the check_button_list and writes it to an outputfile"""
@@ -190,13 +196,16 @@ def main():
     #This fixes grainy widgets
     windll.shcore.SetProcessDpiAwareness(1)
 
-
     root = Tk()
+
+    
+    
     #Running the WellSelector class with the fetched script arguments
     app = WellSelector(root,
                        args["foperand"],
                        args["soperand"],
                        args["toperand"])
+
     root.mainloop()
     
 if __name__ == "__main__": main()
