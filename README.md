@@ -12,13 +12,14 @@ If the script receives no arguments it will default to these settings.
 
 You can run the script from the commandline or from other programs and parse the arguments -plate_format, -info_text and -title. 
 
-- The -plate_format tells the GUI how many rowsXcolumns that the microplate overview needs to have.
+- The -n_rows tells the GUI how many rows that the microplate overview needs to have.
+- The -n_cols tells the GUI how many colums that the microplate overview needs to have.
 - The -info_text tells the GUI what to write as a header over the microplate overview.
 - The title tells the GUI what the name of the window running the GUI should be.
 
 Example of running the GUI through powershell in the script directory: 
 
-* `.\well_selector.py -plate_format "8x12" -info_text "Choose your target wells" -title "WellSelector"`
+* `.\well_selector.py -n_rows 8 -n_cols 12 -info_text "Choose your target wells" -title "WellSelector"`
 
 When pressing the button "Done", 3 things will happen:
 
