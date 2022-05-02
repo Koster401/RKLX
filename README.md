@@ -28,4 +28,5 @@ When pressing the button "Done", 3 things will happen:
 
 Hopefully this is all what is needed for you to succesfully use the WellSelector GUI
 
-- Rasmus
+Best
+Rasmus
