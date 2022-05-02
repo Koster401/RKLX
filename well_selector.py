@@ -189,10 +189,6 @@ def main():
                     help="third operand")
     args = vars(ap.parse_args())
 
-    #print(args["foperand"])
-    #print(args["soperand"])
-    #print(args["toperand"])
-
     #This fixes grainy widgets
     windll.shcore.SetProcessDpiAwareness(1)
 
