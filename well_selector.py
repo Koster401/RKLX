@@ -1,5 +1,4 @@
 # WellSelector.py by Rasmus Köster Larsen (RKLX)
-# First version
 
 from tkinter import *
 from tkinter import ttk
@@ -16,7 +15,8 @@ class WellSelector:
 
     def __init__(self,
                  master,
-                 plate_format = "8x12",
+                 n_rows = 8,
+                 n_cols = 12,
                  info_text = "",
                  title = "WellSelector"):
 
@@ -24,22 +24,14 @@ class WellSelector:
 
         Keyword arguments:
         master -- the top level widget
-        plate_format -- The microplate format (default "8x12")
+        n_rows -- The number of rows in the microplate overview (default 8)
+        n_cols -- The number of columns in the microplate overview (default 12)
         info_text -- The heading text on the WellSelector (default "")
         title -- The text in the window header (default "WellSelector")
 
         """
-
-        #Here we very stupidly try to input values if our script arguments were None
-        if plate_format == None:
-            plate_format = "8x12"
-
-        if info_text == None:
-            info_text = ""
-
-        if title == None:
-            title = "WellSelector"
-
+              
+                 
         #Resizing of the window not allowed
         master.resizable(False, False)    
         
@@ -78,22 +70,22 @@ class WellSelector:
                         ipadx = 10,
                         ipady = 10)
         #Calculating the plateformat
-        self.plate_xloc = plate_format.index("x")
-        self.plate_nrows = int(plate_format[0:self.plate_xloc])
-        self.plate_ncols = int(plate_format[self.plate_xloc+1:])
+        #self.plate_xloc = plate_format.index("x")
+        #self.plate_nrows = int(plate_format[0:self.plate_xloc])
+        #self.plate_ncols = int(plate_format[self.plate_xloc+1:])
 
         #Writing down the alphabet like an ape
         self.letters = "ABCDEFGHIJKLMNOPQRSTUVXYZ"
         self.check_value = IntVar()
         
         #Creating and placing the letter labels of the plate
-        for i in range(self.plate_nrows):
+        for i in range(n_rows):
             ttk.Label(self.frame, text = self.letters[i]).grid(row = i + 1,
                                                                column = 0,
                                                                padx = 2,
                                                                sticky = "w")
         #Creating and placing the number labels of the plate
-        for i in range(self.plate_ncols):
+        for i in range(n_cols):
             ttk.Label(self.frame, text = str(i + 1)).grid(row = 0,
                                                           column = i + 1,
                                                           sticky = "s")
@@ -106,8 +98,8 @@ class WellSelector:
         global well_list
 
         #Creating and placing the checkboxes
-        for i in range(self.plate_ncols):
-            for j in range(self.plate_nrows):
+        for i in range(n_cols):
+            for j in range(n_rows):
                 self.well = f"{self.letters[j]}{i+1}"
                 self.well_list.append(self.well)
                 self.check_button_variable_list.append(IntVar())
@@ -175,19 +167,53 @@ def main():
     ap = argparse.ArgumentParser()
     
     # Add the arguments to the parser
-    ap.add_argument("-plate_format",
+    ap.add_argument("-n_rows",
                     "--foperand",
                     required=False,
                     help="first operand")
-    ap.add_argument("-info_text",
+    
+    
+    ap.add_argument("-n_cols",
                     "--soperand",
                     required=False,
                     help="second operand")
-    ap.add_argument("-title",
+    
+    ap.add_argument("-info_text",
                     "--toperand",
                     required=False,
                     help="third operand")
+
+    ap.add_argument("-title",
+                    "--poperand",
+                    required=False,
+                    help="fourth operand")
+    
     args = vars(ap.parse_args())
+
+    #Setting default script parameters for WellSelector
+    n_rows = 8
+    n_cols = 12
+    info_text = ""
+    title = "WellSelector"
+    
+    #Here we very stupidly try to input values if our script arguments were None
+    if bool(args["foperand"]):
+       n_rows = int(args["foperand"])
+       #print(n_rows)
+       
+
+    if bool(args["soperand"]):
+       n_cols = int(args["soperand"])
+       #print(n_cols)
+       
+
+    if bool(args["toperand"]):
+       info_text = args["toperand"]
+       #print(info_text)
+
+    if bool(args["poperand"]):
+       title = args["poperand"]
+       #print(title)
 
     #This fixes grainy widgets
     windll.shcore.SetProcessDpiAwareness(1)
@@ -198,9 +224,10 @@ def main():
     
     #Running the WellSelector class with the fetched script arguments
     app = WellSelector(root,
-                       args["foperand"],
-                       args["soperand"],
-                       args["toperand"])
+                       n_rows,
+                       n_cols,
+                       info_text,
+                       title)
 
     root.mainloop()
     
