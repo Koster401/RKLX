@@ -1,12 +1,12 @@
-# WellSelector
+#### WellSelector
 
 This script allows users to select wells from a microplate format.
 
 When running the script it will use the default settings to generate a GUI depicting a microplate in a 8x12 format with no header text and the window title of "WellSelector".
 
-You can change the what parameters are being fed to WellSelector under the main function:
+You can change the what parameters are being fed to WellSelector in the main function under:
 
-# #Setting default script parameters for WellSelector. 
+`#Setting default script parameters for WellSelector`
 
 If the script receives no arguments it will default to these settings.
 
