@@ -7,6 +7,7 @@ from tkinter.tix import *
 import os
 import argparse
 
+#Testing how to import WellSelector
 #This fixes grainy widgets
 windll.shcore.SetProcessDpiAwareness(1)
 
