@@ -172,7 +172,6 @@ def main():
                     required=False,
                     help="first operand")
     
-    
     ap.add_argument("-n_cols",
                     "--soperand",
                     required=False,
@@ -217,7 +216,8 @@ def main():
 
     #This fixes grainy widgets
     windll.shcore.SetProcessDpiAwareness(1)
-
+    
+    #Creating the toplevel widget
     root = Tk()
 
     
